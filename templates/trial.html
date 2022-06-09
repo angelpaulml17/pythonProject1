@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel=”stylesheet” href=”https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css”rel=”nofollow” integrity=”sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm” crossorigin=”anonymous”>
+<!--    <script src="my.js"></script>-->
+<!--    <link href='http://127.0.0.1:5000/Jquery/my.js'>-->
+<style>
+#canvas {
+  align-content: center;
+  height: 1000px;
+}
+
+#demo {
+  margin: 0 -2px -2px 0;
+  border: #FFF;
+  border: 1px solid rgb(72, 170, 230);
+  display: inline-block;
+}
+
+tr {
+  background: #C0C0C0;
+}
+
+td {
+  width: 50px;
+  height: 50px;
+}
+
+    .add {
+  height: 52px;
+  width: 52px;
+  background: #F4EAE6;
+  cursor: pointer;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+
+#addColumn {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 0 0 0;
+}
+
+.add:hover {
+  background: rgb(246, 192, 82);
+}
+
+#addColumnChild {
+  line-height: 50px;
+}
+
+#addRow {
+  vertical-align: bottom;
+  margin: 0 0 0 2px;
+}
+
+#addRowChild {
+  line-height: 50px;
+}
+
+.del {
+  height: 52px;
+  width: 52px;
+  background: rgb(178, 0, 0);
+  cursor: pointer;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+
+#delColumn {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 0 0 0;
+}
+
+.del:hover {
+  background: rgb(202, 76, 73);
+}
+
+#delColumnChild {
+  line-height: 50px;
+}
+
+#delRow {
+  vertical-align: left;
+  margin: 0 0 0 2px;
+}
+
+#delRowChild {
+  line-height: 50px;
+}
+
+<!--body-->
+<!--{-->
+<!--  font-family: Open sans, Helvetica;-->
+<!--  background: #111;-->
+<!--  color: white;-->
+<!--  font-size: 16px;-->
+<!--}-->
+
+<!--h1-->
+<!--{-->
+<!--  font-weight: lighter;-->
+<!--}-->
+
+<!--small-->
+<!--{-->
+<!--  color: firebrick;-->
+<!--}-->
+
+<!--div.checkbox_select-->
+<!--{-->
+<!--  width: 200px;-->
+<!--}-->
+
+<!--.checkbox_select_anchor-->
+<!--{-->
+<!--  display: block;-->
+<!--  background: firebrick;-->
+<!--  color: white;-->
+<!--  cursor: pointer;-->
+<!--  padding: 10px 5px 5px;-->
+<!--  position: relative;-->
+<!--}-->
+
+<!--.checkbox_select_anchor:after-->
+<!--{-->
+<!--  width: 0;-->
+<!--  height: 0;-->
+<!--  border-left: 10px solid transparent;-->
+<!--  border-right: 10px solid transparent;-->
+<!--  border-top: 10px solid darkred;-->
+<!--  content: "";-->
+<!--  position: absolute;-->
+<!--  right: 10px;-->
+<!--  top: 15px;-->
+<!--}-->
+
+<!--.expanded .checkbox_select_anchor:after-->
+<!--{-->
+<!--  border-top: 0;-->
+<!--  border-bottom: 10px solid firebrick;-->
+<!--}-->
+
+
+<!--.checkbox_select_anchor:hover-->
+<!--{-->
+<!--  background: #FF3030 !important;-->
+<!--}-->
+
+<!--.expanded .checkbox_select_anchor-->
+<!--{-->
+<!--    background: #7C1818;-->
+<!--}-->
+
+<!--div.checkbox_select .select_input-->
+<!--{-->
+<!--    width: 100%;-->
+<!--    cursor: pointer;-->
+<!--}-->
+
+<!--.checkbox_select_dropdown-->
+<!--{-->
+<!--    display: none;-->
+<!--    background: whitesmoke;-->
+<!--}-->
+
+<!--.checkbox_select_dropdown.show-->
+<!--{-->
+<!--    display: block;-->
+<!--}-->
+
+<!--.checkbox_select_dropdown ul-->
+<!--{-->
+<!--    max-height: 150px;-->
+<!--    overflow-y: scroll;-->
+<!--    overflow-x: hidden;-->
+<!--    padding: 0;-->
+<!--  margin: 0;-->
+<!--      border: 1px solid #999;-->
+<!--  border-top: 0;-->
+<!--  border-bottom: 0;-->
+<!--}-->
+<!--.checkbox_select_dropdown ul li-->
+<!--{-->
+<!--    list-style: none;-->
+<!--    position: relative;-->
+<!--    color: #666;-->
+<!--}-->
+<!--.checkbox_select_dropdown ul li label-->
+<!--{-->
+<!--  position: relative;-->
+<!--      padding: 10px 5px 5px 40px;-->
+<!--     display: block;-->
+<!--  cursor: pointer;-->
+<!--}-->
+<!--.checkbox_select_dropdown ul li label:hover-->
+<!--{-->
+<!--  background: #cbcbcb;-->
+<!--  color: white;-->
+<!--}-->
+<!--.checkbox_select_dropdown ul li input:checked + label-->
+<!--{-->
+<!--  background: #bbb;-->
+<!--  color: white;-->
+<!--  text-shadow: 0px 1px 1px rgba(150, 150, 150, 1);-->
+<!--}-->
+<!--.checkbox_select_dropdown ul li input-->
+<!--{-->
+<!--  position: absolute;-->
+<!--  left:0;-->
+<!--  z-index:1;-->
+<!--  display: inline-block;-->
+<!--  height: 100%;-->
+<!--  width: 30px;-->
+<!--}-->
+<!--.checkbox_select_search-->
+<!--{-->
+<!--    width: 200px;-->
+<!--    padding: 10px 5px 5px;-->
+<!--    border: 1px solid #999;-->
+<!--      border-top: 0;-->
+<!--    -webkit-box-sizing: border-box;-->
+<!--    -moz-box-sizing: border-box;-->
+<!--    box-sizing: border-box;-->
+<!--}-->
+
+<!--.checkbox_select_submit-->
+<!--{-->
+<!--    background: #00A600;-->
+<!--    color: white;-->
+<!--    padding: 10px 5px 5px;-->
+<!--    border: 0;-->
+<!--    width: 100%;-->
+<!--    font-size: 14px;-->
+<!--    cursor: pointer;-->
+<!--}-->
+
+<!--.hide-->
+<!--{-->
+<!--    display: none;-->
+<!--}-->
+
+<!--// variable_names-->
+<!--// functionNames-->
+<!--// CONSTANT_VARIABLE_NAMES-->
+<!--// $_my_jquery_selected_element-->
+
+<!--if(typeof String.prototype.trim !== 'function') {-->
+
+<!--    String.prototype.trim = function()-->
+<!--    {-->
+<!--        return this.replace(/^\s+|\s+$/g, '');-->
+<!--    }-->
+<!--}-->
+
+<!--var checkbox_select = function(params)-->
+<!--{-->
+<!--    // Error handling first-->
+<!--    // &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+<!--    var error = false;-->
+
+<!--    // If the selector is not given-->
+<!--    if(!params.selector) {                                              console.error("selector needs to be defined"); error = true; }-->
+
+<!--    // If the selector is not a string-->
+<!--    if(typeof params.selector != "string") {                            console.error("selector needs to be a string"); error = true; }-->
+
+<!--    // If the element is not a form-->
+<!--    if(!$(params.selector).is("form")) {                                console.error("Element needs to be a form"); error = true; }-->
+
+<!--    // If the element doesn't contain a select-->
+<!--    if($(params.selector).find("select").length < 1) {                  console.error("Element needs to have a select in it"); error = true; }-->
+
+<!--    // If the element doesn't contain option elements-->
+<!--    if($(params.selector).find("option").length < 1) {                  console.error("Select element needs to have an option in it"); error = true; }-->
+
+<!--    // If the select element doesn't have a name attribute-->
+<!--    if($(params.selector).find('select').attr('name') == undefined) {   console.error("Select element needs to have a name attribute"); error = true; }-->
+
+<!--    // If there was an error at all, dont continue in the code.-->
+<!--    if(error)-->
+<!--        return false;-->
+
+<!--    // &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+<!--    var that            = this,-->
+<!--        $_native_form   = $(params.selector),-->
+<!--        $_native_select = $_native_form.find('select'),-->
+
+<!--        // Variables-->
+<!--        selector                = params.selector,-->
+<!--        select_name             = $_native_select.attr('name').charAt(0).toUpperCase() + $_native_select.attr('name').substr(1),-->
+<!--        selected_translation    = params.selected_translation   ? params.selected_translation   : "selected",-->
+<!--        all_translation         = params.all_translation        ? params.all_translation        : "All " + select_name + "s",-->
+<!--        not_found_text          = params.not_found              ? params.not_found              : "No " + select_name + "s found.",-->
+<!--        currently_selected      = [],-->
+
+<!--        // Create the elements needed for the checkbox select-->
+<!--        $_parent_div    = $("<div />")      .addClass("checkbox_select"),-->
+<!--        $_select_anchor = $("<a />")        .addClass("checkbox_select_anchor")     .text( select_name ),-->
+<!--        $_search        = $("<input />")    .addClass("checkbox_select_search"),-->
+<!--        $_submit        = $("<input />")    .addClass("checkbox_select_submit")     .val("Apply") .attr('type','submit') .data("selected", ""),-->
+<!--        $_dropdown_div  = $("<div />")      .addClass("checkbox_select_dropdown"),-->
+<!--        $_not_found     = $("<span />")     .addClass("not_found hide")             .text(not_found_text),-->
+<!--        $_ul            = $("<ul />"),-->
+
+<!--        updateCurrentlySelected = function()-->
+<!--        {-->
+<!--            var selected = [];-->
+
+<!--            $_ul.find("input:checked").each(-->
+
+<!--                function()-->
+<!--                {-->
+<!--                    selected.push($(this).val());-->
+<!--                }-->
+<!--            );-->
+
+<!--            currently_selected = selected;-->
+
+<!--            if(selected.length == 0)-->
+<!--            {-->
+<!--                    $_select_anchor.text( select_name )-->
+<!--            }-->
+<!--            else if(selected.length == 1)-->
+<!--            {-->
+<!--                $_select_anchor.text( selected[0] + " " + selected_translation );-->
+<!--            }-->
+<!--            else if(selected.length ==  $_ul.find("input[type=checkbox]").length)-->
+<!--            {-->
+<!--                $_select_anchor.text( all_translation );-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                $_select_anchor.text( selected.length + " " + selected_translation );-->
+<!--            }-->
+<!--        },-->
+
+<!--        // Template for the li, will be used in a loop.-->
+<!--        createItem  = function(name, value, count)-->
+<!--        {-->
+<!--            var uID             = 'checkbox_select_' + select_name + "_" + name.replace(" ", "_"),-->
+<!--                $_li            = $("<li />"),-->
+<!--                $_checkbox      = $("<input />").attr(-->
+<!--                                        {-->
+<!--                                            'name'  : name,-->
+<!--                                            'id'    : uID,-->
+<!--                                            'type'  : "checkbox",-->
+<!--                                            'value' : value-->
+<!--                                        }-->
+<!--                                    )-->
+<!--                                    .click(-->
+
+<!--                                        function()-->
+<!--                                        {-->
+<!--                                            updateCurrentlySelected();-->
+<!--                                        }-->
+<!--                                    ),-->
+
+<!--                $_label         = $("<label />").attr('for', uID),-->
+<!--                $_name_span     = $("<span />").text(name).prependTo($_label),-->
+<!--                $_count_span    = $("<span />").text(count).appendTo($_label);-->
+
+<!--            return $_li.append( $_checkbox.after( $_label ) );-->
+<!--        },-->
+
+<!--    apply = function()-->
+<!--    {-->
+<!--      $_dropdown_div.toggleClass("show");-->
+<!--      $_parent_div.toggleClass("expanded");-->
+
+<!--      if(!$_parent_div.hasClass("expanded"))-->
+<!--      {-->
+<!--        // Only do the Apply event if its different-->
+<!--        if(currently_selected != $_submit.data("selected"))-->
+<!--        {-->
+<!--          $_submit.data("selected" , currently_selected);-->
+
+<!--          that.onApply(-->
+<!--            {-->
+<!--              selected : $_submit.data("selected")-->
+<!--            }-->
+<!--          );-->
+<!--        }-->
+<!--      }-->
+<!--    };-->
+
+<!--    // Event of this instance-->
+<!--    that.onApply = typeof params.onApply == "function" ?-->
+
+<!--                    params.onApply :-->
+
+<!--                    function(e)-->
+<!--                    {-->
+<!--                        //e.selected is accessible-->
+<!--                    };-->
+
+<!--    that.update = function()-->
+<!--    {-->
+<!--        $_ul.empty();-->
+<!--        $_native_select.find("option").each(-->
+
+<!--            function(i)-->
+<!--            {-->
+<!--                $_ul.append( createItem( $(this).text(), $(this).val(), $(this).data("count") ) );-->
+<!--            }-->
+<!--        );-->
+
+<!--        updateCurrentlySelected();-->
+<!--    }-->
+
+<!--    that.check = function(checkbox_name, checked)-->
+<!--    {-->
+<!--        //$_ul.find("input[type=checkbox][name=" + trim(checkbox_name) + "]").attr('checked', checked ? checked : false);-->
+
+<!--    $_ul.find("input[type=checkbox]").each(function()-->
+<!--    {-->
+<!--      // If this elements name is equal to the one sent in the function-->
+<!--      if($(this).attr('name') == checkbox_name)-->
+<!--      {-->
+<!--        // Apply the checked state to this checkbox-->
+<!--        $(this).attr('checked', checked ? checked : false);-->
+
+<!--        // Break out of each loop-->
+<!--        return false;-->
+<!--      }-->
+<!--    });-->
+
+<!--        updateCurrentlySelected();-->
+
+<!--    }-->
+
+<!--    // Build mark up before pushing into page-->
+<!--    $_dropdown_div  .prepend($_search);-->
+<!--    $_dropdown_div  .append($_ul);-->
+<!--    $_dropdown_div  .append($_not_found);-->
+<!--    $_dropdown_div  .append($_submit);-->
+<!--    $_dropdown_div  .appendTo($_parent_div);-->
+<!--    $_select_anchor .prependTo($_parent_div);-->
+
+<!--    // Iterate through option elements-->
+<!--    that.update();-->
+
+<!--    // Events-->
+
+<!--    // Actual dropdown action-->
+<!--    $_select_anchor.click(-->
+
+<!--        function()-->
+<!--        {-->
+<!--            apply();-->
+<!--        }-->
+<!--    );-->
+
+<!--    // Filters the checkboxes by search on keyup-->
+<!--    $_search.keyup(-->
+
+<!--        function()-->
+<!--        {-->
+<!--            var search = $(this).val().toLowerCase().trim();-->
+
+<!--            if( search.length == 1 )-->
+<!--            {-->
+<!--                $_ul.find("label").each(-->
+
+<!--                    function()-->
+<!--                    {-->
+<!--                        if($(this).text().toLowerCase().charAt(0) == search.charAt(0))-->
+<!--                        {-->
+<!--                            if($(this).parent().hasClass("hide"))-->
+<!--                                $(this).parent().removeClass("hide");-->
+
+<!--                            if(!$_not_found.hasClass("hide"))-->
+<!--                                $_not_found.addClass("hide");-->
+<!--                        }-->
+<!--                        else-->
+<!--                        {-->
+<!--                            if(!$(this).parent().hasClass("hide"))-->
+<!--                                $(this).parent().addClass("hide");-->
+
+<!--                            if($_not_found.hasClass("hide"))-->
+<!--                                $_not_found.removeClass("hide");-->
+<!--                        }-->
+<!--                    }-->
+<!--                );-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                // If it doesn't contain-->
+<!--                if($_ul.text().toLowerCase().indexOf(search) == -1)-->
+<!--                {-->
+<!--                    if($_not_found.hasClass("hide"))-->
+<!--                        $_not_found.removeClass("hide");-->
+<!--                }-->
+<!--                else-->
+<!--                {-->
+<!--                    if(!$_not_found.hasClass("hide"))-->
+<!--                        $_not_found.addClass("hide");-->
+<!--                }-->
+
+<!--                $_ul.find("label").each(-->
+
+<!--                    function()-->
+<!--                    {-->
+<!--                        if($(this).text().toLowerCase().indexOf(search) > -1)-->
+<!--                        {-->
+<!--                            if($(this).parent().hasClass("hide"))-->
+<!--                                $(this).parent().removeClass("hide");-->
+<!--                        }-->
+<!--                        else-->
+<!--                        {-->
+<!--                            if(!$(this).parent().hasClass("hide"))-->
+<!--                                $(this).parent().addClass("hide");-->
+<!--                        }-->
+<!--                    }-->
+<!--                );-->
+<!--            }-->
+<!--        }-->
+<!--    );-->
+
+<!--    $_submit.click(-->
+
+<!--        function(e)-->
+<!--        {-->
+<!--            e.preventDefault();-->
+
+<!--            apply();-->
+<!--        }-->
+<!--    );-->
+
+<!--    // Delete the original form submit-->
+<!--    $(params.selector).find('input[type=submit]').remove();-->
+
+<!--    // Put finalized markup into page.-->
+<!--    $_native_select.after($_parent_div);-->
+
+<!--    // Hide the original element-->
+<!--    $_native_select.hide();-->
+<!--};-->
+
+</style>
+
+
+</head>
+
+
+<body>
+
+<table id="demo">
+  {% for row in range(1, sheet.max_row + 1) %}
+  <tr>
+    {% for col in range(1, sheet.max_column + 1): %}
+    <td>{{ sheet.cell(row, col).value }}</td>
+
+    {% endfor %}
+      <td><div id="addColumn" class="add">
+  <div id="addColumnChild"><button onclick="addColumn(this)">+</button></div>
+</div></td>
+  </tr>
+  {% endfor %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</table>
+<script>
+function addColumn (element) {
+console.log(element.closest('tr').rowIndex);
+for (const [i, row] of [...document.querySelectorAll('#demo tr')].entries()) {
+<!--    const input = document.createElement("input")-->
+<!--    input.setAttribute('type', 'text')-->
+<!--    const cell = document.createElement(i ? "td" : "th")-->
+<!--    cell.appendChild(input)-->
+<!--    row.appendChild(cell)-->
+const row1=element.closest('tr').rowIndex
+if(row1==i){
+var subjectObject = {
+  "GREF": {
+    "Capital Expenditure": ["Construction", "Engineering/Design", "Office Furniture"],
+    "Electronic Disposition": ["ARS - Asset Recovery and Disposal", "WEEE"]
+  },
+  "CFS": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
+       var cell3 = row.insertCell(-1);
+       var element2 = document.createElement("select");
+       element2.placeholder="New L1 classification"
+       element2.style.width='200px';
+       var element1 = document.createElement("select");
+       element1.placeholder="New L2 classification"
+       element1.style.width='200px';
+       var element3 = document.createElement("select");
+       element3.placeholder="New L3 classification"
+       element3.style.width='200px';
+       for (var x in subjectObject) {
+    element2.options[element2.options.length] = new Option(x, x);
+  }
+  element2.onchange = function() {
+//empty Chapters- and Topics- dropdowns
+ element1.length = 1;
+ element3.length = 1;
+    //display correct values
+    for (var y in subjectObject[this.value]) {
+      element1.options[element1.options.length] = new Option(y, y);
+    }
+  }
+  element1.onchange = function() {
+//empty Chapters dropdown
+ element3.length = 1;
+    //display correct values
+    var z = subjectObject[element2.value][this.value];
+    for (var i = 0; i < z.length; i++) {
+      element3.options[element3.options.length] = new Option(z[i], z[i]);
+    }
+  }
+
+
+
+
+
+       var select = document.createElement("div");
+       var values = ["Supplier Number", "major account id", "Supplier name", "Fiscal Year"]
+
+    for (const val of values)
+    {
+var option = document.createElement("option");
+<!--        option.value = val;-->
+<!--        option.type="checkbox";-->
+<!--        option.text = val.charAt(0).toUpperCase() + val.slice(1);-->
+<!--    var element0 = document.createElement("input");-->
+<!--            element0.type = "checkbox";-->
+<!--            element0.value = val;-->
+<!--            option.appendChild(element0);-->
+
+<!--        select.appendChild(option);-->
+
+        var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = 'supplier_name';
+    checkbox.name = 'interest';
+    checkbox.value = val;
+
+    var label = document.createElement('label')
+    label.htmlFor = 'supplier_name';
+    label.appendChild(document.createTextNode(val));
+    select.appendChild(checkbox);
+    select.appendChild(label);
+    var br = document.createElement('br')
+    select.appendChild(br);
+
+    }
+
+       element2.type = "text";
+       element1.type = "text";
+       element3.type = "text";
+       row.appendChild(element2);
+       row.appendChild(element1);
+       row.appendChild(element3);
+       row.appendChild(select);
+ var element4 = document.createElement("input");
+        element4.type = "submit";
+        row.appendChild(element4);
+console.log(i);
+element4.onclick = function(){
+var checkboxes =
+                document.getElementsByName('interest');
+
+            var result = "";
+var element5 = document.createElement("div");
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    result += checkboxes[i].value
+                        + " " + " Laptop, ";
+ var cell3 = row.insertCell(-1);
+       var element4 = document.createElement("input");
+       element4.type="text";
+       element4.placeholder=checkboxes[i].value;
+       element4.style.width='200px';
+        element5.appendChild(element4);
+
+                }
+            }
+<!--            document.write("<p> You have selected : "-->
+<!--                    + result + "</p>");-->
+row.appendChild(element5)
+
+
+
+
+};
+
+};
+<!--document.getElementById(submitbutton).onClick=getValue;-->
+ }
+
+}
+
+</script>
+
+
+</body>
+</html>
