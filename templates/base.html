@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--    <link rel="stylesheet" href="./css_final.css">-->
+<!--    -->
+<!--    <script src="./filter.js"></script>-->
+
+    <!-- <link rel="stylesheet" href="./css-1.css"> -->
+    <title>Fixed table</title>
+
+    <style>
+        * {
+    margin: 0px;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+.heading {
+    display: flex;
+    background-color: #232f3e;
+    box-shadow: 0px 1px 2px #232f3e;
+
+}
+h1 {
+    color: black !important;
+    font-weight: bold;
+
+    background: transparent;
+    padding: 7px;
+
+}
+
+
+.outer-wrapper {
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.9);
+    max-width: fit-content;
+    max-height: fit-content;
+
+
+}
+.table-wrapper {
+
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: fit-content;
+    max-height: 80vh;
+
+    margin-top: 22px;
+
+    margin: 15px;
+    padding-bottom: 20px;
+
+}
+
+
+table {
+
+    min-width: max-content;
+
+    border-collapse: separate;
+    border-spacing: 0px;
+
+}
+
+.table-filter {
+    border-radius: 5px;
+}
+
+table th{
+<!--    position: sticky;-->
+    top: 0px;
+
+    background-color: #007DB8;
+    color: white;
+
+    text-align: center;
+    font-weight: normal;
+    font-size: 16px;
+    outline: 0.7px solid black;
+    border: 1.5px solid black;
+
+}
+
+
+
+table th, table td {
+
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+table td {
+    text-align: left;
+
+    font-size: 12px;
+    border: 1px solid rgb(177, 177, 177);
+    padding-left: 15px;
+
+}
+#canvas {
+  align-content: center;
+  height: 1000px;
+}
+
+#demo {
+  margin: 0 -2px -2px 0;
+  border: #FFF;
+  border: 1px solid rgb(72, 170, 230);
+  display: inline-block;
+}
+
+<!--tr {-->
+<!--  background: #C0C0C0;-->
+<!--}-->
+
+<!--td {-->
+<!--  width: 50px;-->
+<!--  height: 50px;-->
+<!--}-->
+#demo {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#demo td {
+  border: 1px solid #ddd;
+  padding: 2px 8px;
+  width: 75px;
+}
+
+#demo tr:nth-child(even){background-color: #f2f2f2;}
+
+#demo tr:hover {background-color: #ddd;}
+
+ #head {
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
+  height: 50px;
+  text-align: left;
+  background-color: #007DB8;
+  color: white;
+}
+    .add {
+  height: 52px;
+  width: 52px;
+  background: #F4EAE6;
+  cursor: pointer;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+
+#addColumn {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 0 0 0;
+}
+
+.add:hover {
+  background: rgb(246, 192, 82);
+}
+
+#addColumnChild {
+  line-height: 50px;
+}
+
+#addRow {
+  vertical-align: bottom;
+  margin: 0 0 0 2px;
+}
+
+#addRowChild {
+  line-height: 50px;
+}
+
+.del {
+  height: 52px;
+  width: 52px;
+  background: rgb(178, 0, 0);
+  cursor: pointer;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  transition-property: background;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}
+
+#delColumn {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px 0 0 0;
+}
+
+.del:hover {
+  background: rgb(202, 76, 73);
+}
+
+#delColumnChild {
+  line-height: 50px;
+}
+
+#delRow {
+  vertical-align: left;
+  margin: 0 0 0 2px;
+}
+
+#delRowChild {
+  line-height: 50px;
+}
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 12px 15px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+<!--  position: fixed;-->
+  bottom: 23px;
+  right: 28px;
+  width: 200px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+ display: none;
+  position: fixed;
+  top: 15%;
+  right: 35%;
+  border: 3px solid #f1f1f1;
+  z-index: 1000;
+  background-color: white;
+}
+.form-popup1 {
+display: none;
+  position: fixed;
+  top: 15%;
+  right: 35%;
+  border: 3px solid #f1f1f1;
+  z-index: 1000;
+}
+/* Add styles to the form container */
+.form-container {
+  max-width: 120%;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] .subject .topic .chapter {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus #check .subject .topic .chapter{
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn  {
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  margin-bottom:5px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+#subject  {
+width: 400px;
+height: 30px;
+}
+#topic{
+width: 400px;
+height: 30px;
+}
+#chapter{
+width: 400px;
+height: 30px;
+}
+.column {
+  float: left;
+  width: 50%;
+  height: 150px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+.multiselect {
+  width: 400px;
+}
+
+.selectBox {
+  position: relative;
+}
+
+.selectBox select {
+  width: 100%;
+  font-weight: bold;
+}
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#checkboxes {
+  display: none;
+  border: 1px #dadada solid;
+  width: 400px;
+}
+
+#checkboxes label {
+  display: block;
+}
+
+#checkboxes label:hover {
+  background-color: #1e90ff;
+}
+
+
+    </style>
+</head>
+
+<body>
+<!--    <div class="heading">-->
+<!--    <h1>Dropdown table filter using JavaScript</h1>-->
+    <!-- <button id="get-unique-values" onclick="getUniqueValuesFromColumn()">Get unique column values</button> -->
+</div>
+    <div class="outer-wrapper">
+    <div class="table-wrapper">
+
+        <table id="demo">
+
+     <tr>
+    <th col-index = 1>Transaction data source
+    <select class="table-filter" name="tsource" id="tsource" onclick="myFunction1(0,'tsource',this.options[this.selectedIndex].value)">
+        <option value="all" selected="selected" >Select source</option>
+                 </select>
+    </th>
+       <th col-index = 2>Major Account Id
+        <select class="table-filter" name="majoracc" id="majoracc" onchange="myFunction1(1,'majoracc',this.options[this.selectedIndex].value)">
+            <option value="all" selected="selected" >Select Major account id</option>
+        </select>
+    </th>
+         <th col-index = 3>Major Account Name
+
+        <select class="table-filter" name="majoraccname" id="majoraccname" onchange="myFunction1(2,'majoraccname', this.options[this.selectedIndex].value)">
+            <option value="all" selected="selected" >Select Major account name</option>
+        </select>
+    </th>
+
+<!--    <tr id="head">-->
+<!--   <th col-index = 1>Transaction Data Source-->
+<!--   <select class="table-filter" name="tsource" id="tsource">-->
+<!--                     <option value="all" selected="selected" onchange="filter_rows()">Select source</option>-->
+<!--                    </select>-->
+<!--   </th>-->
+
+<!--    <th col-index = 2>Major Account Id-->
+<!--        <select class="table-filter" name="majoracc" id="majoracc">-->
+<!--            <option value="all" selected="selected" onchange="filter_rows()">Select Major account id</option>-->
+<!--        </select>-->
+<!--    </th>-->
+<!--    <th col-index = 3>Major Account Name-->
+
+<!--        <select class="table-filter" name="majoraccname" id="majoraccname">-->
+<!--            <option value="all" selected="selected" onchange="filter_rows()">Select Major account id</option>-->
+<!--        </select>-->
+<!--    </th>-->
+    <th col-index = 4>Cost Center
+<!--    <select class="table-filter" name="CostCenter" id="CostCenter" onchange="myFunction1(2,'CostCenter', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Cost Center</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 5>Set Of Books Name
+<!--    <select class="table-filter" name="majoraccname" id="SetOfBooksName" onchange="myFunction1(2,'SetOfBooksName', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Set Of Books Name</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 6>Invoice Number
+<!--    <select class="table-filter" name="majoraccname" id="InvoiceNumber" onchange="myFunction1(2,'InvoiceNumber', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Invoice Number/option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 7>Invoice Description
+<!--    <select class="table-filter" name="majoraccname" id="InvoiceDescription" onchange="myFunction1(2,'InvoiceDescription', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Invoice Description</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 8>Invoice Date
+<!--    <select class="table-filter" name="majoraccname" id="InvoiceDate" onchange="myFunction1(2,'InvoiceDate', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Invoice Date</option>-->
+<!--        </select>-->
+
+    </th>
+    <th col-index = 9>Invoice Source
+<!--    <select class="table-filter" name="majoraccname" id="InvoiceSource" onchange="myFunction1(2,'InvoiceSource', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Invoice Source</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 10>Spend Usd
+<!--    <select class="table-filter" name="majoraccname" id="SpendUsd" onchange="myFunction1(2,'SpendUsd', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Spend Usd</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 11>PO Number
+<!--    <select class="table-filter" name="majoraccname" id="PONumber" onchange="myFunction1(2,'PO Number', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select PO Number</option>-->
+<!--        </select>-->
+<!--    </th>-->
+    <th col-index = 12>PO Description
+<!--    <select class="table-filter" name="majoraccname" id="PODescription" onchange="myFunction1(2,'PODescription', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select PO Description</option>-->
+<!--        </select>-->
+<!--    </th>-->
+    <th col-index = 13>Paid Date
+<!--    <select class="table-filter" name="majoraccname" id="PaidDate" onchange="myFunction1(2,'PaidDate', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Paid Date</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 14>Spend Category id
+<!--    <select class="table-filter" name="majoraccname" id="SpendCategoryid" onchange="myFunction1(2,'SpendCategoryid', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Spend Category id</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 15>Spend Category L1
+<!--    <select class="table-filter" name="majoraccname" id="SpendCategoryl1" onchange="myFunction1(2,'SpendCategoryl1', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Spend Category L1</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 16>Spend Category L2
+<!--    <select class="table-filter" name="majoraccname" id="SpendCategoryl2" onchange="myFunction1(2,'SpendCategoryl2', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Spend Category L2</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 17>Spend Category L3
+<!--    <select class="table-filter" name="majoraccname" id="SpendCategoryl3" onchange="myFunction1(2,'SpendCategoryl3', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Spend Category L3</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 18>Supplier number
+<!--    <select class="table-filter" name="majoraccname" id="Suppliernumber" onchange="myFunction1(2,'Suppliernumber', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Supplier number</option>-->
+<!--        </select>-->
+
+    </th>
+    <th col-index = 19>Supplier name
+<!--    <select class="table-filter" name="majoraccname" id="Suppliername" onchange="myFunction1(2,'Suppliername', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Supplier name</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 20>Parent supplier
+<!--    <select class="table-filter" name="majoraccname" id="Parentsupplier" onchange="myFunction1(2,'Parentsupplier', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Parent supplier</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 21>Mopm
+<!--    <select class="table-filter" name="majoraccname" id="Mopmm" onchange="myFunction1(2,'Mopmm', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Mopm</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 22>Commodity Type
+<!--    <select class="table-filter" name="majoraccname" id="COMMODITYTYPE" onchange="myFunction1(2,'COMMODITYTYPE', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select COMMODITY TYPE</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 23>Fiscal Month
+<!--    <select class="table-filter" name="majoraccname" id="FiscalMonth" onchange="myFunction1(2,'FiscalMonth', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Fiscal Month</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 24>Fiscal Quartr
+<!--    <select class="table-filter" name="majoraccname" id="FiscalQuartr" onchange="myFunction1(2,'FiscalQuartr', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Fiscal Quartr</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 25>Fiscal Year
+<!--    <select class="table-filter" name="majoraccname" id="FiscalYear" onchange="myFunction1(2,'FiscalYear', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select Fiscal Year</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 26>L1 Classification
+<!--    <select class="table-filter" name="majoraccname" id="L1CLASSIFICATION" onchange="myFunction1(2,'L1CLASSIFICATION', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select L1CLASSIFICATION</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 27>L2 Classification
+<!--    <select class="table-filter" name="majoraccname" id="L2CLASSIFICATION" onchange="myFunction1(2,'L2CLASSIFICATION', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select L2 CLASSIFICATION</option>-->
+<!--        </select>-->
+    </th>
+    <th col-index = 28>L3 Classification
+<!--    <select class="table-filter" name="majoraccname" id="L3CLASSIFICATION" onchange="myFunction1(2,'L3CLASSIFICATION', this.options[this.selectedIndex].value)">-->
+<!--            <option value="all" selected="selected" >Select L3CLASSIFICATION</option>-->
+<!--        </select>-->
+    </th>
+</tr>
+            <tr class="header">
+    <th col-index = 1 ><input type="text" id="tasource" onkeyup="myFunction(0,'tasource')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 2><input type="text" id="majoraccc" onkeyup="myFunction(1,'majoraccc')" placeholder="Search for names.." title="Type in a name"></th>
+       <th col-index = 3><input type="text" id="majoraccnamee" onkeyup="myFunction(2,'majoraccnamee')" placeholder="Search for names.." title="Type in a name"></th>
+      <th col-index = 4><input type="text" id="cost" onkeyup="myFunction(3,'cost')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 5><input type="text" id="setof" onkeyup="myFunction(4,'setof')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 6><input type="text" id="inum" onkeyup="myFunction(5,'inum')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 7><input type="text" id="ides" onkeyup="myFunction(6,'ides')" placeholder="Search for names.." title="Type in a name"></th>
+    <th  col-index = 8><input type="text" id="idate" onkeyup="myFunction(7,'idate')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 9><input type="text" id="isource" onkeyup="myFunction(8,'isource')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 10><input type="text" id="susd" onkeyup="myFunction(9,'susd')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 11><input type="text" id="po" onkeyup="myFunction(10,'po')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 12><input type="text" id="pod" onkeyup="myFunction(11,'pod')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 13><input type="text" id="pdate" onkeyup="myFunction(12,'pdate')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 14><input type="text" id="slid" onkeyup="myFunction(13,'slid')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 15><input type="text" id="sl1" onkeyup="myFunction(14,'sl1')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 16><input type="text" id="sl2" onkeyup="myFunction(15,'sl2')" placeholder="Search for names.." title="Type in a name"></th>
+<th col-index = 17><input type="text" id="sl3" onkeyup="myFunction(16,'sl3')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 18><input type="text" id="snum" onkeyup="myFunction(17,'snum')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 19><input type="text" id="sname" onkeyup="myFunction(18,'sname')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 20><input type="text" id="psu" onkeyup="myFunction(19,'psu')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 21><input type="text" id="mopm" onkeyup="myFunction(20,'mopm')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 22><input type="text" id="ctype" onkeyup="myFunction(21,'ctype')" placeholder="Search for names.." title="Type in a name"></th>
+    <th col-index = 23><input type="text" id="fmon" onkeyup="myFunction(22,'fmon')" placeholder="Search for names.." title="Type in a name"></th>
+     <th col-index = 24><input type="text" id="fqa" onkeyup="myFunction(23,'fqa')" placeholder="Search for names.." title="Type in a name"></th>
+     <th col-index = 25><input type="text" id="fy" onkeyup="myFunction(24,'fy')" placeholder="Search for names.." title="Type in a name"></th>
+     <th col-index = 26><input type="text" id="l1" onkeyup="myFunction(25,'l1')" placeholder="Search for names.." title="Type in a name"></th>
+     <th col-index = 27><input type="text" id="l2" onkeyup="myFunction(26,'l2')" placeholder="Search for names.." title="Type in a name"></th>
+     <th col-index = 28><input type="text" id="l3" onkeyup="myFunction(27,'l3')" placeholder="Search for names.." title="Type in a name"></th>
+
+
+            </tr>
+<tbody>
+    </tr>
+        {% for row in range(0, records|count ): %}
+    <tr>
+        {% for col in range(0, records[0]|count ): %}
+        <td>{{ records[row][col]}}</td>
+
+        {% endfor %}
+<!--        <td>-->
+<!--            <div id="addColumn" class="add">-->
+<!--                <div id="addColumnChild">-->
+<!--                    <button onclick="addColumn(this)">+</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </td>-->
+        <td>
+            <button class="open-button" onclick="openForm(this)">Misclassification request</button>
+            <div class="form-popup" id="myForm">
+                <form class="form-container" onsubmit="return false">
+                    <h1>Misclassification request</h1>
+
+<!--                    <label for="L1"><b>New L1 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L1" name="L1" id="L1" required>-->
+
+<!--                    <label for="L2"><b>New L2 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L2" name="L2" id="L2" required>-->
+
+<!--                    <label for="L3"><b>New L3 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L3" name="L3" id="L3" required>-->
+                    <label for="subject"><b>New L1 classification</b></label><br>
+                    <select name="subject" id="subject">
+                     <option value="" selected="selected">Select subject</option>
+                    </select>
+                    <br><br>
+                  <label for="topic"><b>New L2 classification</b></label><br>
+                    <select name="topic" id="topic">
+                      <option value="" selected="selected">Please select L1 first</option>
+                    </select>
+                    <br><br>
+                  <label for="chapter"><b>New L3 classification</b></label> <br>
+                    <select name="chapter" id="chapter">
+                      <option value="" selected="selected">Please select L2 first</option>
+                    </select>
+                    <br><br>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                            <label for="check"><b>Fields to create rule</b></label>
+                            <select id="check">
+                                <option>Select the fields</option>
+                            </select>
+                            <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes">
+                            <label for="supplier_name">
+                                <input type="checkbox" id="supplier_name" />Supplier Name</label>
+                            <label for="supplier_number">
+                                <input type="checkbox" id="supplier_number" />Supplier Number</label>
+                            <label for="po_number">
+                                <input type="checkbox" id="po_number"/>PO Number</label>
+                            <label for="fiscal_year">
+                                <input type="checkbox" id="fiscal_year"/>Fiscal Year</label>
+                            <label for="CostCenter_SetOfBooksName">
+                                <input type="checkbox" id="CostCenter_SetOfBooksName" />Cost-Center Set Of Books Name</label>
+                            <label for="major_account_id">
+                                <input type="checkbox" id="major_account_id"/>Major account ID</label>
+
+
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn" onclick="getsummary()">Submit</button>
+                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                </form>
+            </div>
+
+
+            <div class="form-popup" id="summary">
+                <form class="form-container" onsubmit="return false">
+                    <h1>Misclassification request summary</h1>
+
+<!--                    <label for="L1"><b>New L1 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L1" name="L1" id="L1" required>-->
+
+<!--                    <label for="L2"><b>New L2 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L2" name="L2" id="L2" required>-->
+
+<!--                    <label for="L3"><b>New L3 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L3" name="L3" id="L3" required>-->
+
+
+                    <div class="container">
+  <div class="row">
+    <div class="column">
+      <label><b>New L1 classification</b></label><br>
+                     <span id="newl1"></span>
+                    <br><br>
+                  <label><b>New L2 classification</b></label><br>
+                    <span id="newl2"></span>
+                    <br><br>
+                  <label ><b>New L3 classification</b></label> <br>
+                    <span id="newl3"></span>
+    </div>
+    <div class="column">
+      <label><b>Old L1 classification</b></label><br>
+                     <span id="oldl1"></span>
+                    <br><br>
+                  <label><b>Old L2 classification</b></label><br>
+                    <span id="oldl2"></span>
+                    <br><br>
+                  <label ><b>Old L3 classification</b></label> <br>
+                    <span id="oldl3"></span>
+    </div>
+  </div>
+</div>
+
+                    <h3><label><b>Spend Impact</b></label></h3>
+                    <div><b><label id="spend"></label></b>
+                        <span id="spend"></span></div>
+
+                    <h3><label><b>Fields selected to create a rule</b></label></h3>
+                    <div><b><label id="snuml"></label></b>
+                        <span id="snumv"></span></div>
+                    <div><b><label id="snamel"></label></b>
+                        <span id="snamev"></span></div>
+                    <div><b><label id="pol"></label></b>
+                        <span id="pov"></span></div>
+                    <div><b><label id="fyl"></label></b>
+                        <span id="fyv"></span></div>
+                    <div><b><label id="csl"></label></b>
+                        <span id="csv"></span></div>
+                    <div><b><label id="mal"></label></b>
+                        <span id="mav"></span></div>
+
+<br><br>
+
+                    <button type="submit" class="btn" onclick="getsummary()">Submit</button>
+                    <button type="button" class="btn cancel" onclick="closesummary()">Close</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</table>
+    <script>
+
+
+    function myFunction(index,inputname) {
+    console.log("insied")
+    uniqueval={}
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById(inputname);
+  filter = input.value.toUpperCase();
+  table = document.getElementById("demo");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[index];
+    console.log(td)
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if(tr[i].style.display=="")
+      {
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+<!--          for(var col_index =0; col_index<3; col_index++){-->
+<!--          cell_value=tr[i].getElementsByTagName("td")[col_index].innerText-->
+<!--          console.log(cell_value)-->
+<!--          if (col_index in uniqueval) {-->
+
+<!--                // if the cell value is already present in the array-->
+<!--                if (uniqueval[col_index].includes(cell_value)) {-->
+<!--                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])-->
+
+<!--                } else {-->
+<!--                    uniqueval[col_index].push(cell_value)-->
+<!--                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])-->
+
+<!--                }-->
+
+
+<!--            } else {-->
+<!--                uniqueval[col_index] = new Array(cell_value)-->
+<!--           }}-->
+
+
+
+
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+<!-- updateSelectOptions(uniqueval)-->
+}
+
+
+
+function myFunction1(index,inputname, val) {
+console.log(val)
+if (val!="all"){
+findchange(index,inputname, val)}
+}
+function findchange(index,inputname, val){
+console.log("inside func1 "+ val)
+uniqueval={}
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById(inputname);
+  console.log(input)
+  filter = val.toUpperCase();
+  table = document.getElementById("demo");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+  console.log(index)
+    td = tr[i].getElementsByTagName("td")[index];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if(tr[i].style.display=="")
+      {
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+
+          for(var col_index =0; col_index<3; col_index++){
+          cell_value=tr[i].getElementsByTagName("td")[col_index].innerText
+          console.log(cell_value)
+          if (col_index in uniqueval) {
+
+                // if the cell value is already present in the array
+                if (uniqueval[col_index].includes(cell_value)) {
+                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])
+
+                } else {
+                    uniqueval[col_index].push(cell_value)
+                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])
+
+                }
+
+
+            } else {
+                uniqueval[col_index] = new Array(cell_value)
+           }}
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  updateSelectOptions(uniqueval)
+}
+
+
+
+
+
+        window.onload = () => {
+            console.log(document.querySelector("#demo > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
+        };
+
+ getUniqueValuesFromColumn()
+        // Get unique values for the desired columns
+
+// {2 : ["M", "F"], 3 : ["RnD", "Engineering", "Design"], 4 : [], 5 : []}
+
+function getUniqueValuesFromColumn() {
+
+<!--   for transaction data source-->
+    var transactionselect =document.getElementById("tsource");
+    var tsource={{transaction_source|safe}}
+    console.log(tsource)
+    var transaction=[]
+    for (let x=0; x<tsource.length; x++) {
+    transaction.push(tsource[x]);
+  }
+    tsource_unique=[...new Set(transaction)]
+  console.log(tsource_unique)
+  for (let x=0; x<tsource_unique.length; x++) {
+<!--  console.log(arr[0]);-->
+    transactionselect.options[transactionselect.options.length] = new Option(tsource_unique[x], tsource_unique[x]);
+
+  }
+<!--  for major account id-->
+var majoraccselect =document.getElementById("majoracc");
+    var majacc={{major_account|safe}}
+    console.log(majacc)
+    var str='None'
+    var majoraccount=[]
+    for (let x=0; x<majacc.length; x++) {
+    console.log(majacc[x]);
+    majoraccount.push(majacc[x]);
+  }
+    majacc_unique=[...new Set(majoraccount)]
+  console.log(majacc_unique);
+
+  for (let x=0; x<majacc_unique.length; x++) {
+<!--  console.log(arr[0]);-->
+    majoraccselect.options[majoraccselect.options.length] = new Option(majacc_unique[x], majacc_unique[x]);
+
+  }
+
+
+
+ <!--      for major account name-->
+var majoraccselectname =document.getElementById("majoraccname");
+    var majaccname={{major_name|safe}}
+    console.log(majaccname)
+    majaccname_unique=[...new Set(majaccname)]
+  console.log(majaccname_unique);
+
+  for (let x=0; x<majaccname_unique.length; x++) {
+<!--  console.log(arr[0]);-->
+    majoraccselectname.options[majoraccselectname.options.length] = new Option(majaccname_unique[x], majaccname_unique[x]);
+
+  }
+<!--      for CostCenter-->
+<!--var CostCenter1 =document.getElementById("CostCenter");-->
+<!--    var CostCenter2={{CostCenter|safe}}-->
+<!--    console.log(CostCenter2)-->
+<!--    CostCenter_unique=[...new Set(CostCenter2)]-->
+<!--  console.log(CostCenter_unique);-->
+
+<!--  for (let x=0; x<CostCenter_unique.length; x++) {-->
+<!--&lt;!&ndash;  console.log(arr[0]);&ndash;&gt;-->
+<!--    CostCenter1.options[CostCenter1.options.length] = new Option(CostCenter_unique[x], CostCenter_unique[x]);-->
+<!--}-->
+
+<!--&lt;!&ndash;      for CostCenter&ndash;&gt;-->
+<!--var set_of_books_name1 =document.getElementById("setofbooksname");-->
+<!--    var set_of_books_name={{set_of_books_name|safe}}-->
+<!--    console.log(set_of_books_name)-->
+<!--    set_of_books_name_unique=[...new Set(set_of_books_name)]-->
+<!--  console.log(set_of_books_name_unique);-->
+
+<!--  for (let x=0; x<set_of_books_name_unique.length; x++) {-->
+<!--&lt;!&ndash;  console.log(arr[0]);&ndash;&gt;-->
+<!--    set_of_books_name1.options[set_of_books_name1.options.length] = new Option(set_of_books_name_unique[x], set_of_books_name_unique[x]);-->
+
+<!--  }-->
+
+<!--&lt;!&ndash;      for CostCenter&ndash;&gt;-->
+<!--var InvoiceNumber1 =document.getElementById("InvoiceNumber");-->
+<!--    var InvoiceNumber={{InvoiceNumber|safe}}-->
+<!--    console.log(InvoiceNumber)-->
+<!--    InvoiceNumber_unique=[...new Set(InvoiceNumber)]-->
+<!--  console.log(InvoiceNumber_unique);-->
+
+<!--  for (let x=0; x<InvoiceNumber_unique.length; x++) {-->
+<!--&lt;!&ndash;  console.log(arr[0]);&ndash;&gt;-->
+<!--    InvoiceNumber1.options[InvoiceNumber1.options.length] = new Option(InvoiceNumber_unique[x], InvoiceNumber_unique[x]);-->
+
+<!--  }-->
+<!--InvoiceDescription-->
+<!--&lt;!&ndash;      for CostCenter&ndash;&gt;-->
+<!--var InvoiceDescription1 =document.getElementById("InvoiceDescription");-->
+<!--    var InvoiceDescription={{InvoiceDescription|safe}}-->
+<!--    console.log(InvoiceDescription)-->
+<!--    InvoiceDescription_unique=[...new Set(InvoiceDescription)]-->
+<!--  console.log(InvoiceDescription_unique);-->
+
+<!--  for (let x=0; x<InvoiceDescription_unique.length; x++) {-->
+<!--&lt;!&ndash;  console.log(arr[0]);&ndash;&gt;-->
+<!--    InvoiceDescription1.options[InvoiceDescription1.options.length] = new Option(InvoiceDescription_unique[x], InvoiceDescription_unique[x]);-->
+
+<!--  }-->
+
+
+
+
+
+
+
+
+<!--    var unique_col_values_dict = {}-->
+
+<!--    allFilters = document.querySelectorAll(".table-filter")-->
+<!--    console.log(allFilters)-->
+<!--    allFilters.forEach((filter_i) => {-->
+<!--        col_index = filter_i.parentElement.getAttribute("col-index");-->
+<!--        console.log(col_index)-->
+<!--      const rows = document.querySelectorAll("#demo > tbody > tr")-->
+<!--       for (const [i, row] of [...document.querySelectorAll('#demo tr')].entries()) {-->
+
+<!--console.log(row)-->
+<!--console.log(row.querySelector("td:nth-child(1)"))-->
+<!--&lt;!&ndash; cell_value = row.querySelector("td:nth-child("+col_index+")").innerHTML;&ndash;&gt;-->
+<!--&lt;!&ndash;console.log(cell_value)&ndash;&gt;-->
+
+
+<!--}-->
+<!--        const rows = document.querySelectorAll("#demo > tbody > tr")-->
+<!--        rows.forEach((row) => {-->
+<!--            console.log(row)-->
+<!--            cell_value = row.querySelector("td:nth-child("+col_index+")");-->
+<!--            // if the col index is already present in the dict-->
+<!--            if (col_index in unique_col_values_dict) {-->
+
+<!--                // if the cell value is already present in the array-->
+<!--                if (unique_col_values_dict[col_index].includes(cell_value)) {-->
+<!--                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])-->
+
+<!--                } else {-->
+<!--                    unique_col_values_dict[col_index].push(cell_value)-->
+<!--                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])-->
+
+<!--                }-->
+
+
+<!--            } else {-->
+<!--                unique_col_values_dict[col_index] = new Array(cell_value)-->
+<!--            }-->
+<!--        });-->
+
+
+<!--    });-->
+
+<!--    for(i in unique_col_values_dict) {-->
+<!--        alert("Column index : " + i + " has Unique values : \n" + unique_col_values_dict[i]);-->
+<!--    }-->
+
+<!--    updateSelectOptions(unique_col_values_dict)-->
+
+};
+
+// Add <option> tags to the desired columns based on the unique values
+
+function updateSelectOptions(uniqueval) {
+    const rows = document.querySelectorAll("#demo > tbody > tr")
+    var unique_col_values_dict = {}
+<!--    for(var col_index=1; col_index<3; col_index++){-->
+<!--     rows.forEach((row) => {-->
+<!--            console.log(row)-->
+<!--            if(row.querySelector("td:nth-child("+col_index+")") != null){-->
+<!--            cell_value = row.querySelector("td:nth-child("+col_index+")").innerText;-->
+<!--            // if the col index is already present in the dict-->
+<!--            console.log(cell_value)-->
+<!--            if (col_index in unique_col_values_dict) {-->
+
+<!--                // if the cell value is already present in the array-->
+<!--                if (unique_col_values_dict[col_index].includes(cell_value)) {-->
+<!--                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])-->
+
+<!--                } else {-->
+<!--                    unique_col_values_dict[col_index].push(cell_value)-->
+<!--                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])-->
+
+<!--                }-->
+
+
+<!--            } else {-->
+<!--                unique_col_values_dict[col_index] = new Array(cell_value)-->
+<!--            }-->
+<!--            }-->
+<!--        });-->
+<!--}-->
+    allFilters = document.querySelectorAll(".table-filter")
+
+    allFilters.forEach((filter_i) => {
+    console.log(filter_i)
+        col_index = filter_i.parentElement.getAttribute('col-index')
+        filter_i.innerHTML=""
+        console.log(col_index)
+        if(col_index!=null){
+        console.log(uniqueval[col_index--])
+        uniqueval[col_index--].forEach((i) => {
+            filter_i.innerHTML = filter_i.innerHTML + `\n<option value="${i}">${i}</option>`
+        });
+    }
+    });
+};
+
+
+// Create filter_rows() function
+
+// filter_value_dict {2 : Value selected, 4:value, 5: value}
+
+function filter_rows() {
+console.log("inside filter rows")
+    allFilters = document.querySelectorAll(".table-filter")
+    var filter_value_dict = {}
+
+    allFilters.forEach((filter_i) => {
+        col_index = filter_i.parentElement.getAttribute('col-index')
+console.log(col_index)
+        value = filter_i.value
+        if (value != "all") {
+            filter_value_dict[col_index] = value;
+        }
+        console.log(filter_value_dict)
+    });
+
+    var col_cell_value_dict = {};
+
+<!--     const rows = document.querySelectorAll("#emp-table tbody tr");-->
+    const rows = document.querySelectorAll("#demo tr");
+    rows.forEach((row) => {
+        console.log(row)
+        var display_row = true;
+        allFilters.forEach((filter_i) => {
+            col_index = filter_i.parentElement.getAttribute('col-index')
+            col_cell_value_dict[col_index] = row.querySelector("td:nth-child(" + col_index+ ")")
+        })
+
+        for (var col_i in filter_value_dict) {
+            filter_value = filter_value_dict[col_i]
+            row_cell_value = col_cell_value_dict[col_i]
+
+            if (row_cell_value.indexOf(filter_value) == -1 && filter_value != "all") {
+                display_row = false;
+                break;
+            }
+
+
+        }
+
+        if (display_row == true) {
+            row.style.display = "table-row"
+
+        } else {
+            row.style.display = "none"
+
+        }
+
+
+
+
+
+    })
+
+}
+<!--for pop up-->
+var actrow;
+var selectedarr=[]
+var selports=[]
+var oldports=[]
+function openForm(element) {
+  document.getElementById("myForm").style.display = "block";
+  console.log("inside place")
+  for (const [i, row] of [...document.querySelectorAll('#demo tr')].entries()) {
+  console.log(i)
+const row1=element.closest('tr').rowIndex
+console.log(row1)
+if(row1==i){
+<!--console.log(row)-->
+window.actrow=row;
+<!--console.log(actrow.cells[2].innerHTML)-->
+getvalues()
+}}
+}
+
+function closeForm() {
+
+  document.getElementById("myForm").style.display = "none";
+}
+function closesummary(){
+document.getElementById("summary").style.display = "none";
+}
+
+topass={}
+function getsummary(){
+getvalues()
+closeForm()
+document.getElementById("summary").style.display = "block";
+document.getElementById("newl1").innerHTML = selports[0];
+document.getElementById("newl2").innerHTML = selports[1];
+document.getElementById("newl3").innerHTML = selports[2];
+document.getElementById("oldl1").innerHTML = actrow.cells[25].innerHTML;
+document.getElementById("oldl2").innerHTML = actrow.cells[26].innerHTML;
+document.getElementById("oldl3").innerHTML = actrow.cells[27].innerHTML;
+
+var v2=actrow.cells[25].innerHTML;
+
+topass["L1_classification"]=v2
+topass["L2_classification"]=actrow.cells[26].innerHTML
+topass["L3_classification"]=actrow.cells[27].innerHTML
+for(let i=0; i<selectedarr.length; i++){
+if(selectedarr[i]=="supplier_name"){
+var val="Supplier Name"
+document.getElementById("snamel").innerHTML = val;
+someElement=document.getElementById("snamel")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("snamev").innerHTML = actrow.cells[18].innerHTML;
+someElement1=document.getElementById("snamev")
+someElement1.appendChild(mybr);
+var v1=actrow.cells[18].innerHTML;
+topass["supplier_name"]=v1;
+}
+if(selectedarr[i]=="supplier_number"){
+var val="Supplier Number"
+document.getElementById("snuml").innerHTML = val;
+someElement=document.getElementById("snuml")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("snumv").innerHTML = actrow.cells[17].innerHTML;
+someElement1=document.getElementById("snumv")
+someElement1.appendChild(mybr);
+topass["supplier_number"]=actrow.cells[17].innerHTML;
+}
+if(selectedarr[i]=="po_number"){
+var val="PO Number"
+document.getElementById("pol").innerHTML = val;
+someElement=document.getElementById("pol")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("pov").innerHTML = actrow.cells[10].innerHTML;
+someElement1=document.getElementById("pov")
+someElement1.appendChild(mybr);
+topass["po_number"]=actrow.cells[10].innerHTML;
+}
+if(selectedarr[i]=="fiscal_year"){
+var val="Fiscal Year"
+document.getElementById("fyl").innerHTML = val;
+someElement=document.getElementById("fyl")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("fyv").innerHTML = actrow.cells[24].innerHTML;
+someElement1=document.getElementById("fyv")
+someElement1.appendChild(mybr);
+topass["Fiscal_Year"]=actrow.cells[24].innerHTML;
+}
+if(selectedarr[i]=="major_account_id"){
+var val="Major Account ID"
+document.getElementById("mal").innerHTML = val ;
+someElement=document.getElementById("mal")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("mav").innerHTML = actrow.cells[1].innerHTML;
+someElement1=document.getElementById("mav")
+someElement1.appendChild(mybr);
+topass["major_account_id"]=actrow.cells[1].innerHTML;
+}
+if(selectedarr[i]=="CostCenter_SetOfBooksName"){
+var val="Cost Center Set-of Books Name"
+document.getElementById("csl").innerHTML = val;
+someElement=document.getElementById("csl")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("csv").innerHTML = actrow.cells[4].innerHTML;
+someElement1=document.getElementById("csv")
+someElement1.appendChild(mybr);
+topass["set_of_books_name"]=actrow.cells[4].innerHTML;
+}
+
+
+
+}
+ const s = JSON.stringify(topass);
+console.log(topass)
+var spenda;
+$.ajax({
+            url:"/rest",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)
+
+            }).done(function(data){console.log(data)
+
+            spenda=data});
+setTimeout(function () {
+      document.getElementById("spend").innerHTML = "$ "+spenda;
+    }, 20000);
+
+<!--        var options = {-->
+<!--        method: 'POST',-->
+
+<!--        // http:flaskserverurl:port/route-->
+<!--        uri: 'http://127.0.0.1:5000/rest',-->
+<!--        body: s,-->
+
+<!--        // Automatically stringifies-->
+<!--        // the body to JSON-->
+<!--        json: true-->
+<!--    };-->
+
+<!--    var sendrequest = await request(options)-->
+
+<!--        // The parsedBody contains the data-->
+<!--        // sent back from the Flask server-->
+<!--        .then(function (parsedBody) {-->
+<!--            console.log(parsedBody);-->
+
+<!--            // You can do something with-->
+<!--            // returned data-->
+<!--            let result;-->
+<!--            result = parsedBody['result'];-->
+<!--            console.log("Sum of Array from Python: ", result);-->
+<!--        })-->
+<!--        .catch(function (err) {-->
+<!--            console.log(err);-->
+<!--        });-->
+            console.log(spenda)
+}
+<!--for checkbox select-->
+var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+
+
+function addColumn (element) {
+console.log(element.closest('tr').rowIndex);
+for (const [i, row] of [...document.querySelectorAll('#demo tr')].entries()) {
+<!--    const input = document.createElement("input")-->
+<!--    input.setAttribute('type', 'text')-->
+<!--    const cell = document.createElement(i ? "td" : "th")-->
+<!--    cell.appendChild(input)-->
+<!--    row.appendChild(cell)-->
+const row1=element.closest('tr').rowIndex
+if(row1==i){
+var subjectObject = {
+  "GREF": {
+    "Capital Expenditure": ["Construction", "Engineering/Design", "Office Furniture"],
+    "Electronic Disposition": ["ARS - Asset Recovery and Disposal", "WEEE"]
+  },
+  "CFS": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
+       var cell3 = row.insertCell(-1);
+       var element2 = document.createElement("select");
+       element2.placeholder="New L1 classification"
+       element2.style.width='200px';
+       var element1 = document.createElement("select");
+       element1.placeholder="New L2 classification"
+       element1.style.width='200px';
+       var element3 = document.createElement("select");
+       element3.placeholder="New L3 classification"
+       element3.style.width='200px';
+
+<!--       var l1=document.getElementById("L1")-->
+<!--       var l2=document.getElementById("L2")-->
+<!--       var l3=document.getElementById("L3")-->
+
+
+       for (var x in subjectObject) {
+    element2.options[element2.options.length] = new Option(x, x);
+  }
+  element2.onchange = function() {
+//empty Chapters- and Topics- dropdowns
+ element1.length = 1;
+ element3.length = 1;
+    //display correct values
+    for (var y in subjectObject[this.value]) {
+      element1.options[element1.options.length] = new Option(y, y);
+    }
+  }
+  element1.onchange = function() {
+//empty Chapters dropdown
+ element3.length = 1;
+    //display correct values
+    var z = subjectObject[element2.value][this.value];
+    for (var i = 0; i < z.length; i++) {
+      element3.options[element3.options.length] = new Option(z[i], z[i]);
+    }
+  }
+
+
+<!--            for (var x in subjectObject) {-->
+<!--    l1.options[l1.options.length] = new Option(x, x);-->
+<!--  }-->
+<!--  l1.onchange = function() {-->
+<!--//empty Chapters- and Topics- dropdowns-->
+<!-- l2.length = 1;-->
+<!-- l3.length = 1;-->
+<!--    //display correct values-->
+<!--    for (var y in subjectObject[this.value]) {-->
+<!--      l2.options[l2.options.length] = new Option(y, y);-->
+<!--    }-->
+<!--  }-->
+<!--  l2.onchange = function() {-->
+<!--//empty Chapters dropdown-->
+<!-- l3.length = 1;-->
+<!--    //display correct values-->
+<!--    var z = subjectObject[l1.value][this.value];-->
+<!--    for (var i = 0; i < z.length; i++) {-->
+<!--      l3.options[l3.options.length] = new Option(z[i], z[i]);-->
+<!--    }-->
+<!--  }-->
+
+
+
+
+
+       var select = document.createElement("div");
+       var values = ["Supplier Number", "major account id", "Supplier name", "Fiscal Year"]
+
+    for (const val of values)
+    {
+var option = document.createElement("option");
+<!--        option.value = val;-->
+<!--        option.type="checkbox";-->
+<!--        option.text = val.charAt(0).toUpperCase() + val.slice(1);-->
+<!--    var element0 = document.createElement("input");-->
+<!--            element0.type = "checkbox";-->
+<!--            element0.value = val;-->
+<!--            option.appendChild(element0);-->
+
+<!--        select.appendChild(option);-->
+
+        var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = 'supplier_name';
+    checkbox.name = 'interest';
+    checkbox.value = val;
+
+    var label = document.createElement('label')
+    label.htmlFor = 'supplier_name';
+    label.appendChild(document.createTextNode(val));
+    select.appendChild(checkbox);
+    select.appendChild(label);
+    var br = document.createElement('br')
+    select.appendChild(br);
+
+    }
+
+       element2.type = "text";
+       element1.type = "text";
+       element3.type = "text";
+       row.appendChild(element2);
+       row.appendChild(element1);
+       row.appendChild(element3);
+       row.appendChild(select);
+ var element4 = document.createElement("input");
+        element4.type = "submit";
+        row.appendChild(element4);
+<!--console.log(i);-->
+element4.onclick = function(){
+var checkboxes =
+                document.getElementsByName('interest');
+
+            var result = "";
+var element5 = document.createElement("div");
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    result += checkboxes[i].value
+                        + " " + " Laptop, ";
+ var cell3 = row.insertCell(-1);
+       var element4 = document.createElement("input");
+       element4.type="text";
+       element4.placeholder=checkboxes[i].value;
+       element4.style.width='200px';
+        element5.appendChild(element4);
+
+                }
+            }
+<!--            document.write("<p> You have selected : "-->
+<!--                    + result + "</p>");-->
+row.appendChild(element5)
+
+
+
+
+};
+
+};
+<!--document.getElementById(submitbutton).onClick=getValue;-->
+ }
+
+}
+var subjectObject = {
+  "Front-end": {
+    "HTML": ["Links", "Images", "Tables", "Lists"],
+    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
+    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]
+  },
+  "Back-end": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
+window.onload = function() {
+<!--console.log({{res}}.length)-->
+<!--console.log(window.actrow)-->
+var arr={{res|safe}}
+<!--console.log(arr)-->
+  var subjectSel = document.getElementById("subject");
+  var topicSel = document.getElementById("topic");
+  var chapterSel = document.getElementById("chapter");
+  var l1=[]
+  for (let x=0; x<arr.length; x++) {
+  l1.push(arr[x][0]);
+
+  }
+
+  l1_unique=[...new Set(l1)]
+
+
+  for (let x=0; x<l1_unique.length; x++) {
+<!--  console.log(arr[0]);-->
+    subjectSel.options[subjectSel.options.length] = new Option(l1_unique[x], l1_unique[x]);
+
+  }
+  subjectSel.onchange = function() {
+ //empty Chapters- and Topics- dropdowns
+chapterSel.length = 1;
+topicSel.length = 1;
+    //display correct values
+    var second=this.value;
+    selports.push(second)
+<!--    console.log(this.value)-->
+    var l2=[]
+    for(let i=0; i<arr.length; i++){
+    if(arr[i][0]==second)
+    l2.push(arr[i][1])
+    }
+    l2_unique=[...new Set(l2)]
+for (let x=0; x<l2_unique.length; x++) {
+
+    topicSel.options[topicSel.options.length] = new Option(l2_unique[x], l2_unique[x]);
+
+  }
+  }
+  topicSel.onchange = function() {
+//empty Chapters dropdown
+chapterSel.length = 1;
+    //display correct values
+    var third=this.value;
+    selports.push(third);
+    var mid=subjectSel.value
+<!--    console.log(mid)-->
+<!--    console.log(third)-->
+    var l3=[]
+    for( let i=0; i<arr.length; i++){
+    if(arr[i][0]==mid && arr[i][1]==third)
+    l3.push(arr[i][2])
+    }
+    l3_unique=[...new Set(l3)]
+    for (var i = 0; i < l3_unique.length; i++) {
+      chapterSel.options[chapterSel.options.length] = new Option(l3_unique[i], l3_unique[i]);
+    }
+  }
+  chapterSel.onchange = function() {
+  selports.push(this.value);
+  }
+}
+
+function getvalues(){
+console.log("inside getval")
+console.log(actrow);
+const one = document.getElementById('supplier_name');
+if (one.checked)
+selectedarr.push('supplier_name');
+
+const two = document.getElementById('supplier_number');
+if (two.checked)
+selectedarr.push('supplier_number');
+
+const third = document.getElementById('po_number');
+if (third.checked)
+selectedarr.push('po_number');
+
+const fourth = document.getElementById('fiscal_year');
+if (fourth.checked)
+selectedarr.push('fiscal_year');
+
+const five = document.getElementById('CostCenter_SetOfBooksName');
+if (five.checked)
+selectedarr.push('CostCenter_SetOfBooksName');
+
+const six = document.getElementById('major_account_id');
+if (six.checked)
+selectedarr.push('major_account_id');
+
+console.log(selectedarr)
+console.log(selports)
+
+}
+
+
+    </script>
+</div>
+</div>
+</body>
+
+</html>

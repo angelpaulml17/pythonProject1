@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel=”stylesheet” href=”https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css”rel=”nofollow” integrity=”sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm” crossorigin=”anonymous”>
-<!--    <script src="my.js"></script>-->
-<!--    <link href='http://127.0.0.1:5000/Jquery/my.js'>-->
-<style>
+    <link rel=”stylesheet” href=”https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css”rel=”nofollow”
+          integrity=”sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm” crossorigin=”anonymous”>
+    <!--    <script src="my.js"></script>-->
+    <!--    <link href='http://127.0.0.1:5000/Jquery/my.js'>-->
+    <style>
 #canvas {
   align-content: center;
   height: 1000px;
@@ -20,15 +21,38 @@
   display: inline-block;
 }
 
-tr {
-  background: #C0C0C0;
+<!--tr {-->
+<!--  background: #C0C0C0;-->
+<!--}-->
+
+<!--td {-->
+<!--  width: 50px;-->
+<!--  height: 50px;-->
+<!--}-->
+#demo {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
 }
 
-td {
-  width: 50px;
+#demo td {
+  border: 1px solid #ddd;
+  padding: 2px 8px;
+  width: 75px;
+}
+
+#demo tr:nth-child(even){background-color: #f2f2f2;}
+
+#demo tr:hover {background-color: #ddd;}
+
+ #head {
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
   height: 50px;
+  text-align: left;
+  background-color: #007DB8;
+  color: white;
 }
-
     .add {
   height: 52px;
   width: 52px;
@@ -107,7 +131,7 @@ td {
   border: none;
   cursor: pointer;
   opacity: 0.8;
-  position: fixed;
+<!--  position: fixed;-->
   bottom: 23px;
   right: 28px;
   width: 200px;
@@ -115,24 +139,31 @@ td {
 
 /* The popup form - hidden by default */
 .form-popup {
-  display: none;
+ display: none;
   position: fixed;
-  bottom: 15%;
-  right: 40%;
+  top: 15%;
+  right: 35%;
   border: 3px solid #f1f1f1;
   z-index: 9;
 }
-
+.form-popup1 {
+display: none;
+  position: fixed;
+  top: 15%;
+  right: 35%;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
 /* Add styles to the form container */
 .form-container {
-  max-width: 350px;
+  max-width: 120%;
   padding: 10px;
   background-color: white;
 }
 
 /* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 90%;
+.form-container input[type=text], .form-container input[type=password] .subject .topic .chapter {
+  width: 100%;
   padding: 10px;
   margin: 5px 0 15px 0;
   border: none;
@@ -140,13 +171,13 @@ td {
 }
 
 /* When the inputs get focus, do something */
-.form-container input[type=text]:focus, .form-container input[type=password]:focus #check{
+.form-container input[type=text]:focus, .form-container input[type=password]:focus #check .subject .topic .chapter{
   background-color: #ddd;
   outline: none;
 }
 
 /* Set a style for the submit/login button */
-.form-container .btn {
+.form-container .btn  {
   background-color: #04AA6D;
   color: white;
   padding: 10px 15px;
@@ -161,13 +192,36 @@ td {
 .form-container .cancel {
   background-color: red;
 }
+#subject  {
+width: 400px;
+height: 30px;
+}
+#topic{
+width: 400px;
+height: 30px;
+}
+#chapter{
+width: 400px;
+height: 30px;
+}
+.column {
+  float: left;
+  width: 50%;
+  height: 150px; /* Should be removed. Only for demonstration */
+}
 
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
 .multiselect {
-  width: 200px;
+  width: 400px;
 }
 
 .selectBox {
@@ -190,6 +244,7 @@ td {
 #checkboxes {
   display: none;
   border: 1px #dadada solid;
+  width: 400px;
 }
 
 #checkboxes label {
@@ -200,7 +255,9 @@ td {
   background-color: #1e90ff;
 }
 
-</style>
+
+
+    </style>
 
 
 </head>
@@ -209,63 +266,343 @@ td {
 <body>
 
 <table id="demo">
-  {% for row in range(1, len(records) + 1) %}
-  <tr>
-    {% for col in range(1, len(records[0]) + 1): %}
-    <td>{{ records[row][col]}}</td>
+    <tr id="head">
+   <td>Transaction Data Source</td>
 
-    {% endfor %}
-      <td><div id="addColumn" class="add">
-  <div id="addColumnChild"><button onclick="addColumn(this)">+</button></div>
-</div></td>
-      <td>
-          <button class="open-button" onclick="openForm()">Open Form</button>
-          <div class="form-popup" id="myForm">
-  <form class="form-container">
-    <h1>Misclassification request</h1>
+    <td>Major Account Id</td>
+    <td>Major Account Name</td>
+    <td>Cost Center</td>
+    <td>Set Of Books Name</td>
+    <td>Invoice Number</td>
+    <td>Invoice Description</td>
+    <td>Invoice Date</td>
+    <td>Invoice Source</td>
+    <td>Spend Usd</td>
+    <td>PO Number</td>
+    <td>PO Description</td>
+    <td>Paid Date</td>
+    <td>Spend Category id</td>
+    <td>Spend Category L1</td>
+    <td>Spend Category L2</td>
+<td>Spend Category L3</td>
+    <td>Supplier number</td>
+    <td>Supplier name</td>
+    <td>Parent supplier</td>
+    <td>Mopm</td>
+    <td>COMMODITY TYPE</td>
+    <td>Fiscal Month</td>
+     <td>Fiscal Quartr</td>
+     <td>Fiscal Year</td>
+     <td>L1 CLASSIFICATION</td>
+     <td>L2 CLASSIFICATION</td>
+     <td>L3 CLASSIFICATION</td>
 
-    <label for="L1"><b>New L1 classification</b></label>
-    <input type="text" placeholder="Enter new L1" name="L1" id="L1"required>
 
-      <label for="L2"><b>New L2 classification</b></label>
-    <input type="text" placeholder="Enter new L2" name="L2" id="L2"required>
+    </tr>
+        {% for row in range(0, records|count ): %}
+    <tr>
+        {% for col in range(0, records[0]|count ): %}
+        <td>{{ records[row][col]}}</td>
 
-      <label for="L3"><b>New L3 classification</b></label>
-    <input type="text" placeholder="Enter new L3" name="L3"  id="L3"required>
-    <div class="multiselect">
-    <div class="selectBox" onclick="showCheckboxes()">
-        <label for="check"><b>Fields to create rule</b></label>
-      <select id="check">
-        <option>Select the fields</option>
-      </select>
-      <div class="overSelect"></div>
+        {% endfor %}
+<!--        <td>-->
+<!--            <div id="addColumn" class="add">-->
+<!--                <div id="addColumnChild">-->
+<!--                    <button onclick="addColumn(this)">+</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </td>-->
+        <td>
+            <button class="open-button" onclick="openForm(this)">Place Misclassification request</button>
+            <div class="form-popup" id="myForm">
+                <form class="form-container" onsubmit="return false">
+                    <h1>Misclassification request</h1>
+
+<!--                    <label for="L1"><b>New L1 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L1" name="L1" id="L1" required>-->
+
+<!--                    <label for="L2"><b>New L2 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L2" name="L2" id="L2" required>-->
+
+<!--                    <label for="L3"><b>New L3 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L3" name="L3" id="L3" required>-->
+                    <label for="subject"><b>New L1 classification</b></label><br>
+                    <select name="subject" id="subject">
+                     <option value="" selected="selected">Select subject</option>
+                    </select>
+                    <br><br>
+                  <label for="topic"><b>New L2 classification</b></label><br>
+                    <select name="topic" id="topic">
+                      <option value="" selected="selected">Please select L1 first</option>
+                    </select>
+                    <br><br>
+                  <label for="chapter"><b>New L3 classification</b></label> <br>
+                    <select name="chapter" id="chapter">
+                      <option value="" selected="selected">Please select L2 first</option>
+                    </select>
+                    <br><br>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                            <label for="check"><b>Fields to create rule</b></label>
+                            <select id="check">
+                                <option>Select the fields</option>
+                            </select>
+                            <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes">
+                            <label for="supplier_name">
+                                <input type="checkbox" id="supplier_name" />Supplier Name</label>
+                            <label for="supplier_number">
+                                <input type="checkbox" id="supplier_number" />Supplier Number</label>
+                            <label for="po_number">
+                                <input type="checkbox" id="po_number"/>PO Number</label>
+                            <label for="fiscal_year">
+                                <input type="checkbox" id="fiscal_year"/>Fiscal Year</label>
+                            <label for="CostCenter_SetOfBooksName">
+                                <input type="checkbox" id="CostCenter_SetOfBooksName" />Cost-Center Set Of Books Name</label>
+                            <label for="major_account_id">
+                                <input type="checkbox" id="major_account_id"/>Major account ID</label>
+
+
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn" onclick="getsummary()">Submit</button>
+                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                </form>
+            </div>
+
+
+            <div class="form-popup" id="summary">
+                <form class="form-container" onsubmit="return false">
+                    <h1>Misclassification request summary</h1>
+
+<!--                    <label for="L1"><b>New L1 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L1" name="L1" id="L1" required>-->
+
+<!--                    <label for="L2"><b>New L2 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L2" name="L2" id="L2" required>-->
+
+<!--                    <label for="L3"><b>New L3 classification</b></label>-->
+<!--                    <input type="text" placeholder="Enter new L3" name="L3" id="L3" required>-->
+
+
+                    <div class="container">
+  <div class="row">
+    <div class="column">
+      <label><b>New L1 classification</b></label><br>
+                     <span id="newl1"></span>
+                    <br><br>
+                  <label><b>New L2 classification</b></label><br>
+                    <span id="newl2"></span>
+                    <br><br>
+                  <label ><b>New L3 classification</b></label> <br>
+                    <span id="newl3"></span>
     </div>
-    <div id="checkboxes">
-      <label for="one">
-        <input type="checkbox" id="supplier_name" id="one"/>Supplier Name</label>
-      <label for="two">
-        <input type="checkbox" id="supplier_number" id="two"/>Supplier Number</label>
-      <label for="three">
-        <input type="checkbox" id="po_number" id="three"/>PO Number</label>
+    <div class="column">
+      <label><b>Old L1 classification</b></label><br>
+                     <span id="oldl1"></span>
+                    <br><br>
+                  <label><b>Old L2 classification</b></label><br>
+                    <span id="oldl2"></span>
+                    <br><br>
+                  <label ><b>Old L3 classification</b></label> <br>
+                    <span id="oldl3"></span>
     </div>
   </div>
-    <button type="submit" class="btn">Submit</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-  </form>
-</div></td>
-  </tr>
-  {% endfor %}
+</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+                    <h3><label><b>Spend Impact</b></label></h3>
+                    <div><b><label id="spend"></label></b>
+                        <span id="spend"></span></div>
+
+                    <h3><label><b>Fields selected to create a rule</b></label></h3>
+                    <div><b><label id="snuml"></label></b>
+                        <span id="snumv"></span></div>
+                    <div><b><label id="snamel"></label></b>
+                        <span id="snamev"></span></div>
+                    <div><b><label id="pol"></label></b>
+                        <span id="pov"></span></div>
+                    <div><b><label id="fyl"></label></b>
+                        <span id="fyv"></span></div>
+                    <div><b><label id="csl"></label></b>
+                        <span id="csv"></span></div>
+                    <div><b><label id="mal"></label></b>
+                        <span id="mav"></span></div>
+
+<br><br>
+
+                    <button type="submit" class="btn" onclick="getsummary()">Submit</button>
+                    <button type="button" class="btn cancel" onclick="closesummary()">Close</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 </table>
 <script>
 <!--for pop up-->
-function openForm() {
+var actrow;
+var selectedarr=[]
+var selports=[]
+var oldports=[]
+function openForm(element) {
   document.getElementById("myForm").style.display = "block";
+  for (const [i, row] of [...document.querySelectorAll('#demo tr')].entries()) {
+const row1=element.closest('tr').rowIndex
+console.log(row1)
+if(row1==i){
+<!--console.log(row)-->
+window.actrow=row;
+<!--console.log(actrow.cells[2].innerHTML)-->
+getvalues()
+}}
 }
 
 function closeForm() {
+
   document.getElementById("myForm").style.display = "none";
+}
+function closesummary(){
+document.getElementById("summary").style.display = "none";
+}
+
+topass={}
+function getsummary(){
+getvalues()
+closeForm()
+document.getElementById("summary").style.display = "block";
+document.getElementById("newl1").innerHTML = selports[0];
+document.getElementById("newl2").innerHTML = selports[1];
+document.getElementById("newl3").innerHTML = selports[2];
+document.getElementById("oldl1").innerHTML = actrow.cells[25].innerHTML;
+document.getElementById("oldl2").innerHTML = actrow.cells[26].innerHTML;
+document.getElementById("oldl3").innerHTML = actrow.cells[27].innerHTML;
+
+var v2=actrow.cells[25].innerHTML;
+
+topass["L1_classification"]=v2
+topass["L2_classification"]=actrow.cells[26].innerHTML
+topass["L3_classification"]=actrow.cells[27].innerHTML
+for(let i=0; i<selectedarr.length; i++){
+if(selectedarr[i]=="supplier_name"){
+var val="Supplier Name"
+document.getElementById("snamel").innerHTML = val;
+someElement=document.getElementById("snamel")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("snamev").innerHTML = actrow.cells[18].innerHTML;
+someElement1=document.getElementById("snamev")
+someElement1.appendChild(mybr);
+var v1=actrow.cells[18].innerHTML;
+topass["supplier_name"]=v1;
+}
+if(selectedarr[i]=="supplier_number"){
+var val="Supplier Number"
+document.getElementById("snuml").innerHTML = val;
+someElement=document.getElementById("snuml")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("snumv").innerHTML = actrow.cells[17].innerHTML;
+someElement1=document.getElementById("snumv")
+someElement1.appendChild(mybr);
+topass["supplier_number"]=actrow.cells[17].innerHTML;
+}
+if(selectedarr[i]=="po_number"){
+var val="PO Number"
+document.getElementById("pol").innerHTML = val;
+someElement=document.getElementById("pol")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("pov").innerHTML = actrow.cells[10].innerHTML;
+someElement1=document.getElementById("pov")
+someElement1.appendChild(mybr);
+topass["po_number"]=actrow.cells[10].innerHTML;
+}
+if(selectedarr[i]=="fiscal_year"){
+var val="Fiscal Year"
+document.getElementById("fyl").innerHTML = val;
+someElement=document.getElementById("fyl")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("fyv").innerHTML = actrow.cells[24].innerHTML;
+someElement1=document.getElementById("fyv")
+someElement1.appendChild(mybr);
+topass["Fiscal_Year"]=actrow.cells[24].innerHTML;
+}
+if(selectedarr[i]=="major_account_id"){
+var val="Major Account ID"
+document.getElementById("mal").innerHTML = val ;
+someElement=document.getElementById("mal")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("mav").innerHTML = actrow.cells[1].innerHTML;
+someElement1=document.getElementById("mav")
+someElement1.appendChild(mybr);
+topass["major_account_id"]=actrow.cells[1].innerHTML;
+}
+if(selectedarr[i]=="CostCenter_SetOfBooksName"){
+var val="Cost Center Set-of Books Name"
+document.getElementById("csl").innerHTML = val;
+someElement=document.getElementById("csl")
+var mybr = document.createElement('br');
+someElement.appendChild(mybr);
+document.getElementById("csv").innerHTML = actrow.cells[4].innerHTML;
+someElement1=document.getElementById("csv")
+someElement1.appendChild(mybr);
+topass["set_of_books_name"]=actrow.cells[4].innerHTML;
+}
+
+
+
+}
+ const s = JSON.stringify(topass);
+console.log(topass)
+var spenda;
+$.ajax({
+            url:"/rest",
+            type:"POST",
+            contentType: "application/json",
+            data: JSON.stringify(s)
+
+            }).done(function(data){console.log(data)
+
+            spenda=data});
+setTimeout(function () {
+      document.getElementById("spend").innerHTML = "$ "+spenda;
+    }, 20000);
+
+<!--        var options = {-->
+<!--        method: 'POST',-->
+
+<!--        // http:flaskserverurl:port/route-->
+<!--        uri: 'http://127.0.0.1:5000/rest',-->
+<!--        body: s,-->
+
+<!--        // Automatically stringifies-->
+<!--        // the body to JSON-->
+<!--        json: true-->
+<!--    };-->
+
+<!--    var sendrequest = await request(options)-->
+
+<!--        // The parsedBody contains the data-->
+<!--        // sent back from the Flask server-->
+<!--        .then(function (parsedBody) {-->
+<!--            console.log(parsedBody);-->
+
+<!--            // You can do something with-->
+<!--            // returned data-->
+<!--            let result;-->
+<!--            result = parsedBody['result'];-->
+<!--            console.log("Sum of Array from Python: ", result);-->
+<!--        })-->
+<!--        .catch(function (err) {-->
+<!--            console.log(err);-->
+<!--        });-->
+            console.log(spenda)
 }
 <!--for checkbox select-->
 var expanded = false;
@@ -409,7 +746,7 @@ var option = document.createElement("option");
  var element4 = document.createElement("input");
         element4.type = "submit";
         row.appendChild(element4);
-console.log(i);
+<!--console.log(i);-->
 element4.onclick = function(){
 var checkboxes =
                 document.getElementsByName('interest');
@@ -443,6 +780,113 @@ row.appendChild(element5)
  }
 
 }
+var subjectObject = {
+  "Front-end": {
+    "HTML": ["Links", "Images", "Tables", "Lists"],
+    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
+    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]
+  },
+  "Back-end": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
+window.onload = function() {
+<!--console.log({{res}}.length)-->
+<!--console.log(window.actrow)-->
+var arr={{res|safe}}
+<!--console.log(arr)-->
+  var subjectSel = document.getElementById("subject");
+  var topicSel = document.getElementById("topic");
+  var chapterSel = document.getElementById("chapter");
+  var l1=[]
+  for (let x=0; x<arr.length; x++) {
+  l1.push(arr[x][0]);
+
+  }
+  l1_unique=[...new Set(l1)]
+<!--  console.log(l1_unique)-->
+  for (let x=0; x<l1_unique.length; x++) {
+<!--  console.log(arr[0]);-->
+    subjectSel.options[subjectSel.options.length] = new Option(l1_unique[x], l1_unique[x]);
+
+  }
+  subjectSel.onchange = function() {
+ //empty Chapters- and Topics- dropdowns
+chapterSel.length = 1;
+topicSel.length = 1;
+    //display correct values
+    var second=this.value;
+    selports.push(second)
+<!--    console.log(this.value)-->
+    var l2=[]
+    for(let i=0; i<arr.length; i++){
+    if(arr[i][0]==second)
+    l2.push(arr[i][1])
+    }
+    l2_unique=[...new Set(l2)]
+for (let x=0; x<l2_unique.length; x++) {
+
+    topicSel.options[topicSel.options.length] = new Option(l2_unique[x], l2_unique[x]);
+
+  }
+  }
+  topicSel.onchange = function() {
+//empty Chapters dropdown
+chapterSel.length = 1;
+    //display correct values
+    var third=this.value;
+    selports.push(third);
+    var mid=subjectSel.value
+<!--    console.log(mid)-->
+<!--    console.log(third)-->
+    var l3=[]
+    for( let i=0; i<arr.length; i++){
+    if(arr[i][0]==mid && arr[i][1]==third)
+    l3.push(arr[i][2])
+    }
+    l3_unique=[...new Set(l3)]
+    for (var i = 0; i < l3_unique.length; i++) {
+      chapterSel.options[chapterSel.options.length] = new Option(l3_unique[i], l3_unique[i]);
+    }
+  }
+  chapterSel.onchange = function() {
+  selports.push(this.value);
+  }
+}
+
+function getvalues(){
+console.log(actrow);
+const one = document.getElementById('supplier_name');
+if (one.checked)
+selectedarr.push('supplier_name');
+
+const two = document.getElementById('supplier_number');
+if (two.checked)
+selectedarr.push('supplier_number');
+
+const third = document.getElementById('po_number');
+if (third.checked)
+selectedarr.push('po_number');
+
+const fourth = document.getElementById('fiscal_year');
+if (fourth.checked)
+selectedarr.push('fiscal_year');
+
+const five = document.getElementById('CostCenter_SetOfBooksName');
+if (five.checked)
+selectedarr.push('CostCenter_SetOfBooksName');
+
+const six = document.getElementById('major_account_id');
+if (six.checked)
+selectedarr.push('major_account_id');
+
+console.log(selectedarr)
+console.log(selports)
+
+}
+
+
 
 </script>
 
